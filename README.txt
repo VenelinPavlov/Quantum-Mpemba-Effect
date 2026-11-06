@@ -1,0 +1,4 @@
+https://zenodo.org/records/24007042?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImUzYjMyNzQ1LTNlNjItNGFlOC05YTE2LWVlODFkNmI2MDI5ZiIsImRhdGEiOnt9LCJyYW5kb20iOiJkMmNjNThhZTdjZDNhMmY0YmY0YjY4M2M1YWY5MjliZiJ9.kTcTQ-x6lCtxQ6eJu4Amb5nMca5pnxJps_SR30NFTgEdNUIsZe5FGdBnJJlClyp9CJR6ITvsvc2DPxVuS1iQKw
+
+
+This is the link to the diagonalized Hamiltonian - npz file.

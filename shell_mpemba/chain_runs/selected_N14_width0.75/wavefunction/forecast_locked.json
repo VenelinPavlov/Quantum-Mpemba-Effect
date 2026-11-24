@@ -1,0 +1,89 @@
+{
+  "created_unix": 1791139294.006413,
+  "sha256": "170466c09cee8ea9a84f9416ae32e9c348c2bba4583eee6dde30a66e084af25f",
+  "source": "results_chaotic_wavefunction/article_programme/selected_N14_width0.75/exact",
+  "source_forecast_sha256": "77c698dc6e471f61871ad1e4c8f8b062fd55f3abf9b570aa1313fee804064dac",
+  "numerics": {
+    "profile_energy_width": 1.0,
+    "detuning_bins": 16384,
+    "min_profile_states": 30,
+    "smoothing_bins": [
+      0.0,
+      0.5,
+      1.0,
+      2.0,
+      4.0
+    ],
+    "balance_tolerance": 1e-06,
+    "balance_max_iterations": 20000,
+    "frequency_bins": 16385,
+    "block_columns": 128
+  },
+  "config": {
+    "model": {
+      "N": 14,
+      "J": 1.0,
+      "Jxy": 1.0,
+      "hx": 1.0,
+      "hz": 1.0,
+      "hedge": 0.217,
+      "hs": 1.0,
+      "g": 0.5,
+      "eta": 0.5,
+      "link": 6
+    },
+    "kernel_model": "unstructured",
+    "delta_E": 1.0,
+    "min_fit_states": 40,
+    "fit_range": [
+      -9.0,
+      6.0
+    ],
+    "bath_centers": [
+      -5.2,
+      -1.95,
+      0.65,
+      3.25
+    ],
+    "bath_width": 0.75,
+    "polarizations": [
+      0.45,
+      0.6,
+      0.75,
+      0.9
+    ],
+    "tmax": 80.0,
+    "nt": 401,
+    "criteria": {
+      "initial_gap": 0.01,
+      "post_gap": 0.005,
+      "persistence": 1.0,
+      "decay_fraction": 0.95,
+      "distance_floor": 0.005
+    }
+  },
+  "model_names": [
+    "lorentzian_full_raw",
+    "lorentzian_factorized_raw",
+    "lorentzian_shell_exact_B",
+    "lorentzian_common_kernel",
+    "general_full_raw",
+    "general_factorized_raw",
+    "general_shell_exact_B",
+    "general_common_kernel"
+  ],
+  "calibration_source": "results_chaotic_wavefunction/article_programme/selected_N14_width0.75/wavefunction",
+  "selected_pair": [
+    2,
+    15
+  ],
+  "selected_pair_rule": "Largest robust G forecast depth; if no robust event, deepest forecast inversion among eligible pairs.",
+  "controls": {
+    "permutation_seed": 20261003,
+    "permutations": 99,
+    "active_bin_threshold": 0.005
+  },
+  "status": "New preparation trajectories not computed before this forecast lock; physical regime chosen in exploratory static/operator scan.",
+  "supplied_statics": "Exact B_z and preparation-specific diagonal ensembles for conditional curves; raw full/factorized predictions receive no initial-amplitude normalization.",
+  "theory": "Leading real orthogonality-corrected contraction; channels in Lambda only, no additional vertex correlations."
+}

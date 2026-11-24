@@ -1,0 +1,140 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,booktabs,microtype}
+\usepackage[margin=25mm]{geometry}
+\usepackage{fancyvrb}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\sloppy
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\begin{document}
+{\Large\bfseries The typicality code and the joint paper: a consistency check}\par\medskip
+{\small\raggedright Long-range Ising chain, $N=14$. Compared: \url{https://github.com/VenelinPavlov/Quantum-Mpemba-Effect} at commit \code{f469c3a} (6 November 2026) and the code in \code{code/} of this folder. Every number below is printed by \code{code/compare\_pipelines.py}.\par}
+
+\section*{Summary}
+The two implementations use the same Hamiltonian, the same initial states, the same observed spin, the same time step, the same trace distance and the same typicality formula. They differ in two choices, and both change the Ising results:
+\begin{enumerate}\setlength{\itemsep}{2pt}
+\item \textbf{The equilibrium reference.} The code averages $\rho_A(t)$ over $t\in[0,5]$; the paper uses the diagonal ensemble, the $t\to\infty$ average. The average over $[0,5]$ includes the initial transient, which lowers $D^2(0)$ by 9--15\%, moves the crossing from $t=0.24$ to $t\approx0.16$, and makes the exact inversion end at $t\approx2$ instead of persisting.
+\item \textbf{The energy window.} The code uses $E\in[0,11]$. For $\varphi=0$ this is nearly the best window, but applied to the tilted states it gives no inversion. The paper's Fig.~5 uses the best-fitting window for each state, which for the tilted states lies at $E\approx9$--18.
+\end{enumerate}
+Sections~\ref{sec:fig5} and~\ref{sec:levels} explain two differences between the figures of the draft and of the paper: why the typicality curves of the draft's Fig.~5 and the paper's Fig.~5a differ, and where the GOE region of the paper's Fig.~S1(b) sits in the spectrum.
+
+We suggest adopting the diagonal ensemble (Sec.~\ref{sec:ref} gives a drop-in replacement) and stating the windows explicitly.
+
+\section{What agrees}\label{sec:agree}
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item \textbf{Hamiltonian.} Both use $B_z=0.2$ with $\sigma_z=+1$ on \code{basis(2,0)}, $J_{ij}=|i-j|^{-0.9}$, and $x$ fields 0.1 (first site), 0.3 (bulk) and 0.5 (last site), as in Sec.~IV\,B of the paper. The eigenvalues in \code{H\_spectrum\_14.npz} agree with those of \code{code/ising\_data.py} to $2\times10^{-14}$.
+\item \textbf{Initial states.} The code's $\theta$ is the paper's $\varphi$: $\theta=0$ is the product of \code{basis(2,0)}, the $\sigma_z=+1$ state. The paper calls this state $|{\downarrow}\rangle$, following the wording of Eq.~(23) of the typicality draft. The draft's text and the code use opposite words for it, so it would help to state ``$\sigma_z=+1$'' explicitly in the draft.
+\item \textbf{Observable and time grid.} Both observe spin index 5, the sixth spin; the paper notes that the fifth gives the same conclusions. The code's grid, 101 points on $[0,5]$, is the first 101 points of the paper's grid on $[0,20]$.
+\item \textbf{Distance.} Both use the trace distance of the reduced state, $D=\tfrac12\|\rho_A-\rho_A^{\rm ref}\|_1=\tfrac12|\mathbf r-\mathbf r^{\rm ref}|$, and plot $D^2$.
+\item \textbf{Typicality formula.} The code's $D^2(t)=D^2(0)\,|\Omega(t)|^4$ with $\Omega(t)=\sum_\mu\rho_{\mu\mu}e^{-iE_\mu t}$ is Eq.~(1) of the paper, $D(t)=D(0)|\chi(t)|^2$, since $|\Omega|=|\chi|$. With a window, the weights are renormalized inside it in both, as in Eq.~(2).
+\end{itemize}
+
+\section{The equilibrium reference}\label{sec:ref}
+\code{QME - numerical - using\_data.py} takes as reference \code{rhoA\_DE = mean(rhoA(t))} over the 101 samples on $[0,5]$. For a nondegenerate spectrum the reduced state relaxes, on average, to the diagonal ensemble $\mathbf r^\infty=\sum_\mu\rho_{\mu\mu}\,\mathbf r_\mu$, with $\mathbf r_\mu=\langle\psi_\mu|\boldsymbol\sigma_A|\psi_\mu\rangle$. A finite average converges to it only as the window grows, and over $[0,5]$ the first time unit, in which the spin is still far from equilibrium, carries 20\% of the weight. The reference Bloch vectors are:
+
+\begin{center}\small
+\begin{tabular}{lcc}\toprule
+$\varphi/2\pi$ & diagonal ensemble $(x,y,z)$ & average over $[0,5]$ $(x,y,z)$\\\midrule
+0 & $(0.021,\ 0,\ 0.039)$ & $(0.018,\ -0.014,\ 0.114)$\\
+0.035 & $(0.222,\ 0,\ 0.043)$ & $(0.268,\ -0.026,\ 0.097)$\\
+0.05 & $(0.312,\ 0,\ 0.044)$ & $(0.363,\ -0.027,\ 0.087)$\\\bottomrule
+\end{tabular}
+\end{center}
+
+The time average keeps a memory of the initial $z$ polarization and has a nonzero $y$ component, which vanishes in the diagonal ensemble of a real Hamiltonian. Its consequences for the exact curves:
+
+\begin{center}\small
+\begin{tabular}{lcc}\toprule
+ & diagonal ensemble & average over $[0,5]$\\\midrule
+$D^2(0)$ for $\varphi/2\pi=0$, 0.035, 0.05 & 0.231, 0.218, 0.206 & 0.196, 0.194, 0.188\\
+crossing of $\varphi=0$ with 0.035 / 0.05 & $t=0.24$ / 0.24 & $t=0.15$ / 0.17\\
+$\varphi=0$ stays nearer than 0.035 & from $t=0.25$ to $t=5$ (end of the run) & from $t=0.20$ to 2.0\\
+$\varphi=0$ stays nearer than 0.05 & from $t=0.25$ to $t=5$ (end of the run) & from $t=0.20$ to 1.9\\\bottomrule
+\end{tabular}
+\end{center}
+
+With the diagonal ensemble the inversion persists to $t=20$ (Fig.~5 of the paper). With the average over $[0,5]$ it ends at $t\approx2$, because late in the window the curves measure the distance to a reference that is not the equilibrium. The paper's statements about persistence rely on the diagonal ensemble.
+
+\textbf{Suggested change.} Replace the line \code{rhoA\_DE = mean(rhoA(t))} by the reduced diagonal ensemble, $\rho_A^\infty=\sum_\mu\rho_{\mu\mu}\,\mathrm{Tr}_{\bar A}|\psi_\mu\rangle\langle\psi_\mu|$. With the arrays already in the code (\code{eigvecsH}, whose columns are the $|\psi_\mu\rangle$, and \code{rho\_mumu}):
+\begin{Verbatim}[fontsize=\small]
+k = 5                                    # A_subsys = [k], the observed spin
+# axes of psi: spins before k, spin k, spins after k, eigenstate mu
+psi = eigvecsH.reshape(2**k, 2, 2**(N-k-1), -1)
+rhoA_DE = np.empty((2, 2), complex)
+for s in range(2):
+    for u in range(2):
+        rhoA_DE[s, u] = np.einsum('aem,aem->m', psi[:, s], psi[:, u].conj()) @ rho_mumu
+\end{Verbatim}
+This is a $2\times2$ matrix in the convention of the code's \code{reduced\_density\_matrix} ($\rho_A=MM^\dagger$, QuTiP site order), so the rest of the code is unchanged. The reshape makes no copy of \code{eigvecsH}. Item 5 of \code{compare\_pipelines.py} runs these lines and checks that they give the diagonal ensemble of the table above.
+
+\section{The energy window}\label{sec:window}
+\code{QME\_analytical\_only\_Ising.py} uses the window $E\in[0,11]$ for $\theta=0$. The paper's Fig.~5 instead uses, for each state, the window on a grid of step 0.25 that best fits the exact curve on $[0,5]$ while keeping at least 20\% of the weight (\code{common.best\_window}). No window on this grid fits better, so this is the most favourable case for Eq.~(2).
+
+\begin{center}\small
+\begin{tabular}{lcc}\toprule
+$\varphi/2\pi$ & weight in $[0,11]$ & best-fit window (weight kept)\\\midrule
+0 & 0.66 & $[0,\ 11.5)$ (0.67)\\
+0.035 & 0.64 & $[8.5,\ 18.25)$ (0.21)\\
+0.05 & 0.60 & $[9.0,\ 17.75)$ (0.25)\\\bottomrule
+\end{tabular}
+\end{center}
+
+For $\varphi=0$ the code's window is close to the best one. Applied to the tilted states, $[0,11]$ gives no inversion: the deepest reversal is of order $10^{-5}$ in $D^2$, between $t\approx3.5$ and 4.9, with either reference. The best-fit windows do produce an inversion, which ends after about one time unit (paper, Sec.~IV\,B). The draft's Fig.~5 instead uses a different width for each state; Sec.~\ref{sec:fig5} compares it with Fig.~5a of the paper.
+
+\section{Typicality in Fig.~5 of the draft and Fig.~5a of the paper}\label{sec:fig5}
+The two figures show different forms of the typicality formula.
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item \textbf{Fig.~5a of the paper, ``Typicality (1)'':} Eq.~(1) over the full energy distribution of each state, with no window. The energy spread grows with tilt, $\sigma_E=4.64$, 6.47 and 7.44 for $\varphi/2\pi=0$, 0.035 and 0.05, so this formula predicts that the tilted states decay faster. $D^2$ halves at $t=0.10$--0.15 instead of $t=0.25$, and the curves for $\varphi=0$ and 0.05 first cross at $t=0.65$: there is no early inversion.
+\item \textbf{Fig.~5 of the draft, dashed curves:} the windowed formula, Eq.~(5) of the draft (Eq.~(2) of the paper), with a different width for each state, $\Delta W\approx12.5$, 10.25 and 9.3 (draft, Fig.~6), and $D^2(0)$ taken from the exact curve. The counterpart in Fig.~5a is the curve ``Window (2), fitted''.
+\end{itemize}
+\textbf{The draft's curves are reproduced.} With these widths, wherever the window's lower edge sits between $-4$ and 1, the windowed formula follows the exact curves (with the code's reference) on $[0,1]$ to a relative error of 5.5--6.8\%, as in the draft's figure. The inversion comes from the narrowing of the window with tilt. With one common width (9.3, 10.25 or 12.5) for all three states, the first crossing moves to $t=0.79$--1.08, and the early inversion disappears.
+
+\textbf{Timing and depth.} A 6\% error in $D^2$ is small on the scale of the draft's figure, but the inversion itself is only a few per cent of $D^2(0)$. With the draft's widths, the curves for $\varphi=0$ and 0.05 cross at $t=0.08$--0.10, against $t=0.17$ in the exact curves with the code's reference. Fig.~5a plots the difference $D^2_{\varphi=0}-D^2_{\varphi/2\pi=0.05}$ with the diagonal ensemble, on which the comparison reads:
+
+\begin{center}\small
+\begin{tabular}{lcc}\toprule
+ & difference changes sign at & deepest value\\\midrule
+exact & $t=0.24$ & $-0.012$\\
+Eq.~(2), the draft's widths (lower edge $-2.5$) & $t=0.14$ & $-0.022$\\
+Eq.~(2), best-fit windows (Fig.~5a) & $t=0.18$ & $-0.012$\\
+Eq.~(1), full spectrum (Fig.~5a) & $t=0.65$ & (no early inversion)\\\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Level statistics, Fig.~S1(b)}\label{sec:levels}
+In Fig.~S1(b) the mean gap ratio $\langle r\rangle$ is GOE-like from $E\approx-8$ to 1 and drifts towards Poisson above. This can look as if the GOE region sat at the bottom of the spectrum, whereas chaos is usually found in the centre. It is the centre, because the spectrum is strongly asymmetric.
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item The spectrum runs from $-9.66$ to 38.35. The top is the state with all spins along $x$, at $\sum_{i<j}J_{ij}+\sum_iB^x_i=34.10+4.20$.
+\item The density of states peaks in $[-2,-1)$, the median level is at $-0.87$, and half of the levels lie in $[-3.29,\,2.28]$. The midpoint of the range, $E=14.3$, lies above 98.8\% of the levels.
+\item Only 0.3\% of the levels lie below $-8$. That is too few for the bins of Fig.~S1(b), which need at least 50 levels each, and their $\langle r\rangle=0.519$ is still close to GOE.
+\end{itemize}
+
+\begin{center}\small
+\begin{tabular}{lcc}\toprule
+energy & share of the levels & $\langle r\rangle$\\\midrule
+$E<-8$ & 0.3\% & 0.519\\
+$-8\le E<1$ & 66.6\% & 0.531\\
+$1\le E<5$ & 20.4\% & 0.444\\
+$E\ge5$ & 12.8\% & 0.373\\\midrule
+GOE / Poisson & & 0.531 / 0.386\\\bottomrule
+\end{tabular}
+\end{center}
+
+The usual picture therefore holds: GOE statistics in the dense part of the spectrum, and a crossover in its long, sparse upper tail, which ends at the aligned state. The tilted states put their extra weight in this tail (paper, Fig.~5d).
+
+\section{Minor points}
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item \code{QME\_analytical\_only\_Ising.py} labels its $y$ axis $D$ while plotting $D^2$.
+\item In the code the analytic curve is $0.25\,|\Omega|^4\times4\,D^2(0)$; the factors 0.25 and 4 cancel, so this is $D^2(0)|\Omega|^4$, as intended.
+\item Equation numbers: Eq.~(4) of the draft is Eq.~(1) of the paper, the window Eq.~(5) is Eq.~(2), the Gaussian Mpemba time Eq.~(10) is Eq.~(3), and the Ising Hamiltonian and coherent states, Eqs.~(22)--(23), are in Sec.~IV\,B.
+\end{itemize}
+
+\section{How to check}
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item \code{python code/compare\_pipelines.py -{}-their-spectrum path/to/H\_spectrum\_14.npz} prints every number in Secs.~\ref{sec:agree}--\ref{sec:levels} and runs the replacement code of Sec.~\ref{sec:ref} (6 min and 5\,GiB the first time, 30 s after; it builds or reuses the paper's eigensystem, and reads only the eigenvalues of your file).
+\item \code{python code/ising\_data.py} followed by \code{python code/make\_figures.py} recomputes and redraws Fig.~5 and Fig.~S1(b) of the paper; \code{README.md} lists the scripts for the other figures.
+\end{itemize}
+\end{document}

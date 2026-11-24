@@ -1,0 +1,89 @@
+{
+ "created_unix": 1794264516.9575582,
+ "forecasts_sha256": "5c48d04447a08b0f7645c02057d5e66ce03238adf657163f6eb43846c7cf6bcb",
+ "config": {
+  "model": {
+   "N": 14,
+   "J": 1.0,
+   "Jxy": 1.0,
+   "hx": 1.0,
+   "hz": 1.0,
+   "hedge": 0.217,
+   "hs": 1.0,
+   "g": 0.5,
+   "eta": 1.0,
+   "link": 6
+  },
+  "kernel_model": "unstructured",
+  "delta_E": 1.0,
+  "min_fit_states": 40,
+  "fit_range": [
+   -9.0,
+   6.0
+  ],
+  "bath_centers": [
+   -5.2,
+   -1.95,
+   0.65,
+   3.25
+  ],
+  "bath_width": 0.75,
+  "polarizations": [
+   0.45,
+   0.6,
+   0.75,
+   0.9
+  ],
+  "tmax": 80.0,
+  "nt": 401,
+  "criteria": {
+   "initial_gap": 0.01,
+   "post_gap": 0.005,
+   "persistence": 1.0,
+   "decay_fraction": 0.95,
+   "distance_floor": 0.005
+  }
+ },
+ "numerics": {
+  "profile_energy_width": 1.0,
+  "detuning_bins": 16384,
+  "min_profile_states": 30,
+  "smoothing_bins": [
+   0.0,
+   0.5,
+   1.0,
+   2.0,
+   4.0
+  ],
+  "balance_tolerance": 1e-06,
+  "balance_max_iterations": 20000,
+  "frequency_bins": 16385,
+  "block_columns": 128
+ },
+ "statics_at_centres": [
+  {
+   "bath_centre": -5.2,
+   "flip_share_up": 0.2548858854255485,
+   "flip_share_down": 0.22631145149230503,
+   "spin_preserving_over_reverse_flip": 3.537708187931616
+  },
+  {
+   "bath_centre": -1.95,
+   "flip_share_up": 0.24869039219118103,
+   "flip_share_down": 0.24634943398090678,
+   "spin_preserving_over_reverse_flip": 3.351862711876308
+  },
+  {
+   "bath_centre": 0.65,
+   "flip_share_up": 0.2324049888729017,
+   "flip_share_down": 0.24871273902970256,
+   "spin_preserving_over_reverse_flip": 3.383733979814135
+  },
+  {
+   "bath_centre": 3.25,
+   "flip_share_up": 0.2197693284701472,
+   "flip_share_down": 0.25279076229060216,
+   "spin_preserving_over_reverse_flip": 3.3725356040520555
+  }
+ ]
+}

@@ -1,0 +1,113 @@
+{
+ "created_unix": 1794164808.0691426,
+ "forecasts_sha256": "5063413227507f1f227a95fcb1db58ee82fcc4a7c46d4d3239a1ccb96d52bffb",
+ "config": {
+  "model": {
+   "N": 14,
+   "J": 1.0,
+   "Jxy": 1.0,
+   "hx": 1.0,
+   "hz": 1.0,
+   "hedge": 0.217,
+   "hs": 1.0,
+   "g": 0.5,
+   "eta": 0.25,
+   "link": 6
+  },
+  "kernel_model": "unstructured",
+  "delta_E": 1.0,
+  "min_fit_states": 40,
+  "fit_range": [
+   -9.0,
+   6.0
+  ],
+  "bath_centers": [
+   -5.2,
+   -1.95,
+   0.65,
+   3.25
+  ],
+  "bath_width": 0.75,
+  "polarizations": [
+   0.45,
+   0.6,
+   0.75,
+   0.9
+  ],
+  "tmax": 80.0,
+  "nt": 401,
+  "criteria": {
+   "initial_gap": 0.01,
+   "post_gap": 0.005,
+   "persistence": 1.0,
+   "decay_fraction": 0.95,
+   "distance_floor": 0.005
+  }
+ },
+ "numerics": {
+  "profile_energy_width": 1.0,
+  "detuning_bins": 16384,
+  "min_profile_states": 30,
+  "smoothing_bins": [
+   0.0,
+   0.5,
+   1.0,
+   2.0,
+   4.0
+  ],
+  "balance_tolerance": 1e-06,
+  "balance_max_iterations": 20000,
+  "frequency_bins": 16385,
+  "block_columns": 128
+ },
+ "statics_at_centres": [
+  {
+   "bath_centre": -5.2,
+   "eps": -4.217846559781703,
+   "flip_share_up": 0.8291555337050157,
+   "flip_share_down": 0.8058719955657101,
+   "spin_preserving_up_over_reverse_flip": 0.2466080507019221,
+   "pi_up_microcanonical": 0.4644590896515125,
+   "master_rate_up": 0.1048531115841507,
+   "profile_rate_up": 0.10808816864991937
+  },
+  {
+   "bath_centre": -1.95,
+   "eps": -0.9678465597816572,
+   "flip_share_up": 0.825025935526844,
+   "flip_share_down": 0.8233559738784443,
+   "spin_preserving_up_over_reverse_flip": 0.23704090449974466,
+   "pi_up_microcanonical": 0.5011740141578066,
+   "master_rate_up": 0.10011193189781033,
+   "profile_rate_up": 0.10254192796364073
+  },
+  {
+   "bath_centre": 0.65,
+   "eps": 1.6321534402183797,
+   "flip_share_up": 0.8072503087874059,
+   "flip_share_down": 0.8227060093364835,
+   "spin_preserving_up_over_reverse_flip": 0.24431592011589304,
+   "pi_up_microcanonical": 0.529803396502883,
+   "master_rate_up": 0.09435725579942131,
+   "profile_rate_up": 0.09515999961032509
+  },
+  {
+   "bath_centre": 3.25,
+   "eps": 4.232153440218417,
+   "flip_share_up": 0.791166728690637,
+   "flip_share_down": 0.8197898474259808,
+   "spin_preserving_up_over_reverse_flip": 0.2537234609573073,
+   "pi_up_microcanonical": 0.5517551058018516,
+   "master_rate_up": 0.08729688520697765,
+   "profile_rate_up": 0.08924013116299728
+  }
+ ],
+ "predictions": {
+  "P1": "Static criterion: spin-preserving / reverse-flip ratio at the four centres is as listed in statics_at_centres; values below 1 mean the independent-amplitude contraction relaxes too slowly.",
+  "P2": "The article contraction is predicted too slow: median e-fold(article)/e-fold(exact) about {'general': 1.59375, 'lorentzian': 1.6176470588235292}.",
+  "P3": "Vertex forecasts (vertex_general, vertex_lorentzian), each: curve error <= 0.10; e-fold ratio in [0.8, 1.25] for >= 13 of 16 preparations; FP + FN <= max(1, floor(0.25 x exact events)).",
+  "P4": "Each vertex forecast has a lower curve error than the article contraction of the same kind.",
+  "P5": "Master equation (no profile input) is reported for comparison; no pass criterion."
+ },
+ "note": "Locked before any exact trajectory of this case was computed (validation.npz absent at lock time)."
+}
